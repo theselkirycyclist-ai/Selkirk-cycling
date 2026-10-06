@@ -52,6 +52,40 @@
             margin-bottom: 30px;
             color: #2c3e50;
         }
+/* 2-Column Stats Grid for Route Cards */
+.route-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Creates 2 equal columns */
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.stat-item {
+    background: #eef2f5;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.stat-value {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #2d3748;
+}
+
+/* Makes the 5th item stretch across both columns at the bottom */
+.stat-full-width {
+    grid-column: span 2;
+}
 
         /* Route Card Grid */
         .routes-grid {
@@ -188,13 +222,29 @@
                     <h3>Ettrick & Yarrow Valley Circular (short)</h3>
                     <p>A ride up Ettrick Valley with a significant climb over Witchie Knowe down to the Yarrow valley for the return to Selkirk with low traffic and beautiful natural scenery.</p>
                     
-                    <div class="route-stats">
-                        <span>📏 32 km</span>
-                        <span>⛰️ Moderate</span>
-                        <span>⏱️ 1 - 2 hrs</span>
-                        <span>Elevation 399m</span>
-                        <span>Surface 100% road</span>
-                    </div>
+                    <div class="route-stats-grid">
+    <div class="stat-item">
+        <span class="stat-label">Distance</span>
+        <span class="stat-value">📏 32 km</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-label">Elevation</span>
+        <span class="stat-value">⛰️ 420 m</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-label">Est. Time</span>
+        <span class="stat-value">⏱️ 1.5 - 2 hrs</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-label">Surface</span>
+        <span class="stat-value">🚲 Paved / Tarmac</span>
+    </div>
+    <div class="stat-item stat-full-width">
+        <span class="stat-label">Difficulty</span>
+        <span class="stat-value">💪 Moderate</span>
+    </div>
+</div>
+
 
                     <div class="features-list">
                         <h4>Interesting Features Along the Way:</h4>
