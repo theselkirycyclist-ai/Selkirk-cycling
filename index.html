@@ -56,7 +56,7 @@
         /* Route Card Grid */
         .routes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 25px;
         }
 
@@ -66,6 +66,8 @@
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .route-card:hover {
@@ -81,6 +83,9 @@
 
         .route-content {
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
 
         .route-stats {
@@ -96,7 +101,8 @@
         }
 
         .features-list {
-            margin-top: 15px;
+            margin-top: 10px;
+            margin-bottom: 15px;
         }
 
         .features-list h4 {
@@ -116,19 +122,25 @@
             margin-bottom: 5px;
         }
 
-        /* Interactive Map Section */
-        #map-section {
-            margin-top: 60px;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        .card-section-title {
+            font-size: 0.95rem;
+            color: #2c3e50;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-weight: bold;
         }
 
-        #map {
-            height: 400px;
+        .card-map {
+            height: 220px;
             border-radius: 8px;
-            margin-top: 15px;
+            width: 100%;
+            background: #e2e8f0;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 160px;
+            width: 100%;
         }
 
         .btn {
@@ -189,17 +201,26 @@
                         <span class="tag">Stunning Hilltop Views</span>
                     </div>
 
-                    <!-- Forces clean download link -->
                     <a href="test.gpx" download="Ettrick-Yarrow-Loop.gpx" target="_blank" class="btn">Download GPX / Details</a>
+
+                    <!-- Embedded Map 1 -->
+                    <div class="card-section-title">Route Map</div>
+                    <div id="map-1" class="card-map"></div>
+
+                    <!-- Embedded Elevation Profile 1 -->
+                    <div class="card-section-title">Elevation Profile</div>
+                    <div class="chart-wrapper">
+                        <canvas id="elevationChart-1"></canvas>
+                    </div>
                 </div>
             </div>
 
             <!-- Route 2 -->
             <div class="route-card">
-                <img src="Route2.1.jpg" alt="Mountain Pass" class="route-img">
+                <img src="Route2.1.jpg" alt="On The Trail Of The Tour" class="route-img">
                 <div class="route-content">
                     <h3>On The Trail Of The Tour</h3>
-                    <p>A longer tougher route taking in some of the TdF route. Ride in the tracks of the world's best riders;take it easy and enjoy the scenery or go all out on the Col de Melrose before sweeping down the beautiful bends to Selkirk.</p>
+                    <p>A longer tougher route taking in some of the TdF route. Ride in the tracks of the world's best riders; take it easy and enjoy the scenery or go all out on the Col de Melrose before sweeping down the beautiful bends to Selkirk.</p>
                     
                     <div class="route-stats">
                         <span>📏 103 km</span>
@@ -215,10 +236,19 @@
                     </div>
                     
                     <a href="Tour.gpx" download="Tour.gpx" target="_blank" class="btn">Download GPX / Details</a>
+
+                    <!-- Embedded Map 2 -->
+                    <div class="card-section-title">Route Map</div>
+                    <div id="map-2" class="card-map"></div>
+
+                    <!-- Embedded Elevation Profile 2 -->
+                    <div class="card-section-title">Elevation Profile</div>
+                    <div class="chart-wrapper">
+                        <canvas id="elevationChart-2"></canvas>
+                    </div>
                 </div>
             </div>
-        </div > <!-- Closes .route-content -->
-        </div> <!-- Closes .route-card for Route 2 -->
+
             <!-- Route 3 -->
             <div class="route-card">
                 <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80" alt="Coastal Route" class="route-img">
@@ -240,27 +270,19 @@
                     </div>
 
                     <a href="#" class="btn">Download GPX / Details</a>
+
+                    <!-- Embedded Map 3 -->
+                    <div class="card-section-title">Route Map</div>
+                    <div id="map-3" class="card-map"></div>
+
+                    <!-- Embedded Elevation Profile 3 -->
+                    <div class="card-section-title">Elevation Profile</div>
+                    <div class="chart-wrapper">
+                        <canvas id="elevationChart-3"></canvas>
+                    </div>
                 </div>
             </div>
 
-        </div>
-
-        <!-- Interactive Map Section -->
-        <div id="map-section">
-            <h2 style="color: #2c3e50;">Interactive Route & Elevation Profile</h2>
-            <p>Explore the full route map and elevation gain along the way.</p>
-            
-            <!-- Map Canvas -->
-            <div id="map"></div>
-
-            <!-- Elevation Profile Canvas -->
-           <div style="margin-top: 25px; background: #fff; padding: 15px; border-radius: 8px;">
-    <h3 style="color: #2c3e50; font-size: 1.1rem; margin-bottom: 10px;">Elevation Profile</h3>
-    <!-- The new wrapper div below locks the height so Chart.js can't stretch -->
-    <div style="position: relative; height: 250px; width: 100%;">
-        <canvas id="elevationChart"></canvas>
-    </div>
-</div> 
         </div>
     </div>
 
@@ -275,68 +297,57 @@
 
     <!-- Main GPX Map & Chart Script -->
     <script>
-        // 1. Initialize Map centered on Selkirk (55.548, -2.831)
-        const map = L.map('map').setView([55.548, -2.831], 12);
+        // Function to initialize individual card map & chart
+        function initCardRoute(mapId, chartId, gpxUrl, fallbackRoute, fallbackElevations) {
+            const map = L.map(mapId).setView([55.548, -2.831], 11);
 
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
 
-        // 2. Data Arrays for Elevation Chart
-        let distances = [];
-        let elevations = [];
+            let distances = [];
+            let elevations = [];
 
-        // 3. Attempt to load local GPX file
-        const gpxUrl = 'test.gpx'; 
-
-        const gpxLayer = new L.GPX(gpxUrl, {
-            async: true,
-            polyline_options: {
-                color: '#10b981',
-                weight: 5,
-                opacity: 0.8
-            }
-        }).on('loaded', function(e) {
-            const gpx = e.target;
-            map.fitBounds(gpx.getBounds());
-
-            // Extract elevation data
-            const trackPoints = gpx.get_elevation_data(); 
-            trackPoints.forEach(point => {
-                distances.push(point[0].toFixed(1));
-                elevations.push(point[1].toFixed(0));
-            });
-
-            renderElevationChart(distances, elevations);
-        }).addTo(map);
-
-        // Fallback for offline/local file preview (if browser blocks local GPX reading)
-        setTimeout(() => {
-            if (distances.length === 0) {
-                // Draws a sample Selkirk route if local GPX file is blocked by browser security
-                const selkirkRoute = [
-                    [55.548, -2.831],
-                    [55.555, -2.850],
-                    [55.562, -2.875],
-                    [55.542, -2.890],
-                    [55.530, -2.855],
-                    [55.548, -2.831]
-                ];
+            // Load GPX file
+            new L.GPX(gpxUrl, {
+                async: true,
+                polyline_options: {
+                    color: '#10b981',
+                    weight: 4,
+                    opacity: 0.85
+                }
+            }).on('loaded', function(e) {
+                const gpx = e.target;
                 
-                L.polyline(selkirkRoute, { color: '#10b981', weight: 5 }).addTo(map);
-                
-                // Demo elevation profile data
-                distances = ['0', '5', '10', '15', '20', '24'];
-                elevations = ['110', '145', '220', '180', '130', '110'];
-                renderElevationChart(distances, elevations);
-            }
-        }, 800);
+                setTimeout(() => { map.invalidateSize(); }, 200);
+                map.fitBounds(gpx.getBounds());
 
-        // 4. Render Chart.js Chart
-        function renderElevationChart(xData, yData) {
-            const ctx = document.getElementById('elevationChart').getContext('2d');
+                const trackPoints = gpx.get_elevation_data(); 
+                trackPoints.forEach(point => {
+                    distances.push(point[0].toFixed(1));
+                    elevations.push(point[1].toFixed(0));
+                });
+
+                renderCardChart(chartId, distances, elevations);
+            }).addTo(map);
+
+            // Fallback preview if local file is missing/blocked
+            setTimeout(() => {
+                if (distances.length === 0 && fallbackRoute) {
+                    map.invalidateSize();
+                    L.polyline(fallbackRoute, { color: '#10b981', weight: 4 }).addTo(map);
+                    map.fitBounds(L.polyline(fallbackRoute).getBounds());
+                    
+                    const demoDist = ['0', '5', '10', '15', '20', '25', '32'];
+                    renderCardChart(chartId, demoDist, fallbackElevations || ['110', '140', '210', '180', '130', '120', '110']);
+                }
+            }, 800);
+        }
+
+        // Render Chart.js line graph for each card
+        function renderCardChart(chartId, xData, yData) {
+            const ctx = document.getElementById(chartId).getContext('2d');
             
             new Chart(ctx, {
                 type: 'line',
@@ -355,29 +366,47 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index',
-                    },
-                    scales: {
-                        x: {
-                            title: { display: true, text: 'Distance (km)' },
-                            grid: { display: false }
-                        },
-                        y: {
-                            title: { display: true, text: 'Elevation (m)' }
-                        }
-                    },
                     plugins: {
+                        legend: { display: false },
                         tooltip: {
                             callbacks: {
                                 label: (context) => ` Elevation: ${context.raw} m`
                             }
                         }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
+                        },
+                        y: {
+                            ticks: { font: { size: 9 } }
+                        }
                     }
                 }
             });
         }
+
+        // Define Selkirk fallback paths for pre-display
+        const selkirkFallback1 = [
+            [55.548, -2.831], [55.525, -2.850], [55.500, -2.900], 
+            [55.530, -2.930], [55.560, -2.880], [55.548, -2.831]
+        ];
+
+        const selkirkFallback2 = [
+            [55.548, -2.831], [55.580, -2.750], [55.600, -2.700], 
+            [55.620, -2.730], [55.590, -2.800], [55.548, -2.831]
+        ];
+
+        const selkirkFallback3 = [
+            [55.548, -2.831], [55.560, -2.800], [55.570, -2.780], 
+            [55.550, -2.790], [55.548, -2.831]
+        ];
+
+        // Initialize Cards with GPX Files & Fallbacks
+        initCardRoute('map-1', 'elevationChart-1', 'test.gpx', selkirkFallback1, ['110', '160', '280', '220', '140', '110']);
+        initCardRoute('map-2', 'elevationChart-2', 'Tour.gpx', selkirkFallback2, ['110', '210', '390', '450', '280', '150', '110']);
+        initCardRoute('map-3', 'elevationChart-3', 'route3.gpx', selkirkFallback3, ['110', '130', '170', '140', '110']);
     </script>
 </body>
 </html>
