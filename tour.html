@@ -99,7 +99,7 @@
         const elevations = [];
 
         // Load specific GPX file for this page
-        new L.GPX('test.gpx', {
+        new L.GPX('Tour.gpx', {
             async: true,
             polyline_options: { color: '#10b981', weight: 5, opacity: 0.85 }
         }).on('loaded', function(e) {
