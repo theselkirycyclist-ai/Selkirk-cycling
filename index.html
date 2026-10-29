@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discover Selkirk by Bike - Scenic Cycling Routes</title>
-    
-    <!-- Leaflet CSS for interactive maps -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <title>Selkirk Outdoors - Cycling & Walking Routes in the Scottish Borders</title>
     
     <style>
         /* Modern Reset & Base Styling */
@@ -21,16 +18,19 @@
             background-color: #f4f7f6;
             color: #333;
             line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Hero Header Container with Flexbox Layout */
         .hero-header {
-            background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url('header.jpg') center/cover no-repeat;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('header.jpg') center/cover no-repeat;
             color: white;
-            min-height: 520px; /* Provides vertical room for the house photo */
+            min-height: 420px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Pushes top-text up and bottom-text down */
+            justify-content: space-between;
             align-items: center;
             padding: 35px 20px 25px 20px;
             text-align: center;
@@ -44,20 +44,20 @@
         .top-text h1 {
             font-size: 3rem;
             font-weight: 700;
-            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.8); /* Ensures crisp contrast over upper sky */
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
             margin: 0;
         }
 
-        /* Invisible spacer that keeps the middle of the house image completely clear */
+        /* Spacer keeps the middle of the house image completely clear */
         .header-spacer {
             flex-grow: 1;
-            min-height: 200px;
+            min-height: 140px;
         }
 
         .bottom-text p {
             font-size: 1.15rem;
             line-height: 1.5;
-            background: rgba(0, 0, 0, 0.5); /* Subtle dark pill background for easy reading */
+            background: rgba(0, 0, 0, 0.5);
             padding: 12px 22px;
             border-radius: 8px;
             backdrop-filter: blur(3px);
@@ -67,124 +67,104 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1000px;
             margin: 40px auto;
             padding: 0 20px;
+            flex-grow: 1;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             color: #2c3e50;
         }
 
-        /* 2-Column Stats Grid for Route Cards */
-        .route-stats-grid {
+        /* Portal Split Cards Layout */
+        .portal-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Creates 2 equal columns */
-            gap: 8px;
-            margin: 15px 0;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
 
-        .stat-item {
-            background: #eef2f5;
-            padding: 8px 12px;
-            border-radius: 6px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: #718096;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
-
-        .stat-value {
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: #2d3748;
-        }
-
-        /* Makes the 5th item stretch across both columns at the bottom */
-        .stat-full-width {
-            grid-column: span 2;
-        }
-
-        /* Route Card Grid */
-        .routes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-        }
-
-        .route-card {
+        .portal-card {
             background: white;
             border-radius: 12px;
-            overflow: hidden;
+            padding: 35px 25px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.25 ease, box-shadow 0.25s ease;
+            text-decoration: none;
+            color: inherit;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
         }
 
-        .route-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        /* Active Cycling Card Hover Effect */
+        .portal-card.active:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            border-bottom: 4px solid #10b981;
         }
 
-        .route-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .route-content {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .features-list {
-            margin-top: 10px;
+        .card-icon {
+            font-size: 3.5rem;
             margin-bottom: 15px;
         }
 
-        .features-list h4 {
-            font-size: 0.95rem;
+        .portal-card h2 {
+            font-size: 1.8rem;
             color: #2c3e50;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
-        .tag {
-            display: inline-block;
-            background: #e0f2fe;
-            color: #0369a1;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            margin-right: 5px;
-            margin-bottom: 5px;
+        .portal-card p {
+            color: #4a5568;
+            font-size: 1.05rem;
+            margin-bottom: 25px;
+            flex-grow: 1;
         }
 
-        .btn {
+        .btn-action {
             display: inline-block;
             background: #10b981;
             color: white;
-            padding: 10px 18px;
-            text-decoration: none;
+            padding: 12px 24px;
             border-radius: 6px;
             font-weight: bold;
-            margin-top: auto;
-            text-align: center;
             width: 100%;
         }
 
-        .btn:hover {
+        .portal-card.active:hover .btn-action {
             background: #059669;
+        }
+
+        /* Inactive / Coming Soon Walking Card Styles */
+        .portal-card.coming-soon {
+            opacity: 0.7;
+            pointer-events: none; /* Prevents clicks */
+            border: 2px dashed #cbd5e1;
+            background: #fafafa;
+        }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #f59e0b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .btn-disabled {
+            background: #cbd5e1;
+            color: #64748b;
         }
 
         footer {
@@ -200,226 +180,44 @@
 
     <header class="hero-header">
         <div class="header-content top-text">
-            <h1>Discover Selkirk by Bike</h1>
+            <h1>Discover Selkirk Outdoors</h1>
         </div>
 
-        <!-- Spacer pushes top and bottom text apart so the house in the header photo remains clear -->
         <div class="header-spacer"></div>
 
         <div class="header-content bottom-text">
-            <p>Cycle through history, see beautiful countryside, discover bike paths, gravel paths and quiet roads, unwind and enjoy the journey.</p>
+            <p>Explore quiet roads, scenic valleys, historic trails, and rolling hills around Selkirk in the Scottish Borders.</p>
         </div>
     </header>
 
     <div class="container">
-        <h2 class="section-title">Our Favourite Cycling Routes (more routes in course)</h2>
+        <h2 class="section-title">Choose Your Adventure</h2>
         
-        <div class="routes-grid">
+        <div class="portal-grid">
             
-            <!-- Route 1 -->
-            <div class="route-card">
-                <img src="Route1.1.jpg" alt="Valley Loop Route" class="route-img">
-                <div class="route-content">
-                    <h3>Ettrick & Yarrow Valley Circular (short)</h3>
-                    
-                    <div class="route-stats-grid">
-                        <div class="stat-item">
-                            <span class="stat-label">Distance</span>
-                            <span class="stat-value">📏 32 km</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Elevation</span>
-                            <span class="stat-value">⛰️ 420 m</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Est. Time</span>
-                            <span class="stat-value">⏱️ 1 - 2 hrs</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Surface</span>
-                            <span class="stat-value">🚲 Paved / Tarmac</span>
-                        </div>
-                        <div class="stat-item stat-full-width">
-                            <span class="stat-label">Difficulty</span>
-                            <span class="stat-value">💪 Moderate</span>
-                        </div>
-                    </div>
+            <!-- Active Cycling Branch -->
+            <a href="cycling/index.html" class="portal-card active">
+                <div class="card-icon">🚲</div>
+                <h2>Cycling Routes</h2>
+                <p>Explore quiet Borders tarmac, gravel tracks, and scenic valley circulars around Selkirk with interactive maps and elevation graphs.</p>
+                <span class="btn-action">Explore Cycling Routes &rarr;</span>
+            </a>
 
-                    <div class="features-list">
-                        <h4>Interesting Features Along the Way:</h4>
-                        <span class="tag">☕ Waterwheel Cafe</span>
-                        <span class="tag">Award winning Cross Keys Inn</span>
-                        <span class="tag">Stunning Hilltop Views</span>
-                    </div>
-
-                    <a href="ettrick-yarrow-loop.html" class="btn">View Route Info & Interactive Map</a>
-                </div>
+            <!-- Hidden / In-Development Walking Branch -->
+            <div class="portal-card coming-soon">
+                <span class="badge">Coming Soon</span>
+                <div class="card-icon">🥾</div>
+                <h2>Walking Trails</h2>
+                <p>Discover historic paths, hill walks, common land loops, and countryside rambles around the Royal Burgh of Selkirk.</p>
+                <span class="btn-action btn-disabled">Launching Soon</span>
             </div>
-
-            <!-- Route 2 -->
-            <div class="route-card">
-                <img src="Route2.1.jpg" alt="On The Trail Of The Tour" class="route-img">
-                <div class="route-content">
-                    <h3>On The Trail Of The Tour</h3>
-                    
-                    <div class="route-stats-grid">
-                        <div class="stat-item">
-                            <span class="stat-label">Distance</span>
-                            <span class="stat-value">📏 103 km</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Elevation</span>
-                            <span class="stat-value">⛰️ 1,300 m</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Est. Time</span>
-                            <span class="stat-value">⏱️ 3 - 5 hrs</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Surface</span>
-                            <span class="stat-value">🚲 Paved / Tarmac</span>
-                        </div>
-                        <div class="stat-item stat-full-width">
-                            <span class="stat-label">Difficulty</span>
-                            <span class="stat-value">💪 Hard</span>
-                        </div>
-                    </div>
-
-                    <div class="features-list">
-                        <h4>Interesting Features Along the Way:</h4>
-                        <span class="tag">Col de Melrose</span>
-                        <span class="tag">Riverside views</span>
-                        <span class="tag">Ancient Abbey</span>
-                    </div>
-                    
-                    <a href="tour.html" class="btn">View Route Info & Interactive Map</a>
-                </div>
-            </div>
-
-            <!-- Route 3 -->
-            <div class="route-card">
-                <img src="Alemoor1.jpg" alt="Hawick Loop" class="route-img">
-                <div class="route-content">
-                    <h3>Hawick Loop</h3>
-                    
-                    <div class="route-stats-grid">
-                        <div class="stat-item">
-                            <span class="stat-label">Distance</span>
-                            <span class="stat-value">📏 75 km</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Elevation</span>
-                            <span class="stat-value">⛰️ 870 m</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Est. Time</span>
-                            <span class="stat-value">⏱️ 3 - 5 hrs</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Surface</span>
-                            <span class="stat-value">🚲 Mixed Trails / Paths</span>
-                        </div>
-                        <div class="stat-item stat-full-width">
-                            <span class="stat-label">Difficulty</span>
-                            <span class="stat-value">💪 Hard</span>
-                        </div>
-                    </div>
-
-                    <div class="features-list">
-                        <h4>Interesting Features Along the Way:</h4>
-                        <span class="tag">Alemoor loch</span>
-                        <span class="tag">Borders Distillery</span>
-                        <span class="tag">Beautiful Views</span>
-                    </div>
-
-                    <a href="hawick-loop.html" class="btn">View Route Info & Interactive Map</a>
-                </div>
-            </div>
-
-            <!-- ROUTE 4 -->
-            <div class="route-card">
-                <img src="peel.jpg" alt="Peel & Galashiels loop" class="route-img">
-                <div class="route-content">
-                    <h3>Peel & Galashiels loop</h3>
-                    
-                    <div class="route-stats-grid">
-                        <div class="stat-item">
-                            <span class="stat-label">Distance</span>
-                            <span class="stat-value">📏 33 km</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Elevation</span>
-                            <span class="stat-value">⛰️ 285 m</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Est. Time</span>
-                            <span class="stat-value">⏱️ 1.5 - 2 hrs</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Surface</span>
-                            <span class="stat-value">🚲 Paved / Gravel</span>
-                        </div>
-                        <div class="stat-item stat-full-width">
-                            <span class="stat-label">Difficulty</span>
-                            <span class="stat-value">💪 Moderate</span>
-                        </div>
-                    </div>
-
-                    <div class="features-list">
-                        <h4>Interesting Features Along the Way:</h4>
-                        <span class="tag">River Tweed views</span>
-                        <span class="tag">Food stops in Galashiels</span>
-                        <span class="tag">Great Tapestry of Scotland</span>
-                    </div>
-
-                    <a href="peel-gala.html" class="btn">View Route Info & Interactive Map</a>
-                </div>
-            </div>
-<!—walk 1 -->
-<div class="route-card">
-    <img src="walk1.jpg" alt="Dr John Muir walk" class="route-img">
-    <div class="route-content">
-        <h3>Dr John Muir Walk</h3>
-        
-                    <div class="route-stats-grid">
-    <div class="stat-item">
-        <span class="stat-label">Distance</span>
-        <span class="stat-value">📏 8 km</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-label">Elevation</span>
-        <span class="stat-value">⛰️ 196 m</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-label">Est. Time</span>
-        <span class="stat-value">⏱️ 2-2.5hrs</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-label">Surface</span>
-        <span class="stat-value">🥾Paths / Hill Trails</span>
-    </div>
-    <div class="stat-item stat-full-width">
-        <span class="stat-label">Difficulty</span>
-        <span class="stat-value">💪 Easy</span>
-    </div>
-</div>
-
-
-                    <div class="features-list">
-                        <h4>Interesting Features Along the Way:</h4>
-                        <span class="tag">Views from Selkirk Hill</span>
-                        <span class="tag">Scotland’s oldest racecourse </span>
-                        <span class="tag">Walking in the steps of Dr John Muir </span>
-                    </div>
-
-                    <a href="john-muir.html" class="btn">View Route Info & Interactive Map</a>
 
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 Discover Selkirk by Bike. Happy Riding!<br>
-        The Scottish Borders roads are wonderful to ride, but conditions change. These GPX files and route summaries are personal recommendations provided for guidance only—you are responsible for your own safety and navigation on the road.</p>
+        <p>&copy; 2026 Discover Selkirk Outdoors. Happy Exploring!<br>
+        The Scottish Borders paths and roads are wonderful to explore, but conditions change. Route suggestions provided for guidance only—you are responsible for your own safety and navigation.</p>
     </footer>
 
 </body>
