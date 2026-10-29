@@ -74,7 +74,7 @@
                 <canvas id="elevationChart"></canvas>
             </div>
 
-            <a href="H1.gpx" download="Ettrick-Yarrow-Loop.gpx" class="btn">Download GPX File</a>
+            <a href="test.gpx" download="Ettrick-Yarrow-Loop.gpx" class="btn">Download GPX File</a>
         </div>
     </div>
 
@@ -99,7 +99,7 @@
         const elevations = [];
 
         // Load specific GPX file for this page
-        new L.GPX('H1.gpx', {
+        new L.GPX('test.gpx', {
             async: true,
             polyline_options: { color: '#10b981', weight: 5, opacity: 0.85 }
         }).on('loaded', function(e) {
