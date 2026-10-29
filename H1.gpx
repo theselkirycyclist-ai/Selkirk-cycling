@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<gpx version="1.1" creator="GPS Visualizer https://www.gpsvisualizer.com/" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v2 http://www.garmin.com/xmlschemas/TrackPointExtensionv2.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v2" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+<wpt lat="55.49556" lon="-3.2745"></wpt>
+<wpt lat="55.50114" lon="-3.28183"></wpt>
+<wpt lat="55.50518" lon="-3.28447"></wpt>
+<wpt lat="55.51202" lon="-3.29884"></wpt>
+<wpt lat="55.5169" lon="-3.2972"></wpt>
+<wpt lat="55.52219" lon="-3.2986"></wpt>
+<wpt lat="55.52476" lon="-3.30259"></wpt>
+<wpt lat="55.52374" lon="-3.30498"></wpt>
+<wpt lat="55.51207" lon="-3.31771"></wpt>
+<wpt lat="55.50199" lon="-3.3454"></wpt>
+<wpt lat="55.50117" lon="-3.35313"></wpt>
+<wpt lat="55.48898" lon="-3.35159"></wpt>
+<wpt lat="55.48011" lon="-3.35498"></wpt>
+<wpt lat="55.47513" lon="-3.35658"></wpt>
+<wpt lat="55.47125" lon="-3.35194"></wpt>
+<wpt lat="55.47106" lon="-3.34804"></wpt>
+<wpt lat="55.46916" lon="-3.3452"></wpt>
+<trk>
+  <name>H1 Broad Law from Megget Dam to Megget Stane</name>
+  <trkseg>
+    <trkpt lat="55.49556" lon="-3.2745"></trkpt>
+    <trkpt lat="55.50114" lon="-3.28183"></trkpt>
+    <trkpt lat="55.50518" lon="-3.28447"></trkpt>
+    <trkpt lat="55.51202" lon="-3.29884"></trkpt>
+    <trkpt lat="55.5169" lon="-3.2972"></trkpt>
+    <trkpt lat="55.52219" lon="-3.2986"></trkpt>
+    <trkpt lat="55.52476" lon="-3.30259"></trkpt>
+    <trkpt lat="55.52374" lon="-3.30498"></trkpt>
+    <trkpt lat="55.51207" lon="-3.31771"></trkpt>
+    <trkpt lat="55.50199" lon="-3.3454"></trkpt>
+    <trkpt lat="55.50117" lon="-3.35313"></trkpt>
+    <trkpt lat="55.49927" lon="-3.35278"></trkpt>
+    <trkpt lat="55.48898" lon="-3.35159"></trkpt>
+    <trkpt lat="55.48011" lon="-3.35498"></trkpt>
+    <trkpt lat="55.47513" lon="-3.35658"></trkpt>
+    <trkpt lat="55.47125" lon="-3.35194"></trkpt>
+    <trkpt lat="55.47106" lon="-3.34804"></trkpt>
+    <trkpt lat="55.46916" lon="-3.3452"></trkpt>
+  </trkseg>
+</trk>
+</gpx>
