@@ -82,23 +82,21 @@
         <p>&copy; 2026 Discover Selkirk by Bike. Happy Riding!</p>
     </footer>
 
-    <!-- Scripts -->
+        <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // Initialize Map for single route
+        // Initialize Map
         const map = L.map('map').setView([55.548, -2.831], 12);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19, attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        const distances = [];
-        const elevations = [];
-
-        // Load specific GPX file for this page
+        // Load GPX File
         new L.GPX('John-Muir-Walk.gpx', {
             async: true,
             polyline_options: { color: '#10b981', weight: 5, opacity: 0.85 }
@@ -106,17 +104,38 @@
             const gpx = e.target;
             map.fitBounds(gpx.getBounds());
 
-            const trackPoints = gpx.get_elevation_data();
-            trackPoints.forEach(point => {
-                distances.push(point[0].toFixed(1));
-                elevations.push(point[1].toFixed(0));
+            const distances = [];
+            const elevations = [];
+            let totalDistance = 0;
+
+            // Direct extraction from GPX track layers (more reliable across all GPX sources)
+            gpx.get_layers().forEach(layer => {
+                if (layer instanceof L.Polyline) {
+                    const latlngs = layer.getLatLngs();
+                    
+                    for (let i = 0; i < latlngs.length; i++) {
+                        if (i > 0) {
+                            totalDistance += latlngs[i].distanceTo(latlngs[i - 1]) / 1000; // convert meters to km
+                        }
+                        
+                        // Extract elevation (alt) if present, or fallback to 0
+                        const ele = latlngs[i].alt !== undefined ? Math.round(latlngs[i].alt) : 0;
+                        
+                        distances.push(totalDistance.toFixed(1));
+                        elevations.push(ele);
+                    }
+                }
             });
 
-            renderChart(distances, elevations);
+            // If we extracted valid elevation data, render the chart
+            if (elevations.length > 0) {
+                renderChart(distances, elevations);
+            }
         }).addTo(map);
 
         function renderChart(xData, yData) {
             const ctx = document.getElementById('elevationChart').getContext('2d');
+            
             new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -127,7 +146,8 @@
                         borderColor: '#10b981',
                         backgroundColor: 'rgba(16, 185, 129, 0.15)',
                         fill: true,
-                        tension: 0.3, pointRadius: 0
+                        tension: 0.3,
+                        pointRadius: 0
                     }]
                 },
                 options: {
@@ -135,12 +155,19 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { title: { display: true, text: 'Distance (km)' } },
-                        y: { title: { display: true, text: 'Elevation (m)' } }
+                        x: { 
+                            title: { display: true, text: 'Distance (km)' },
+                            ticks: { maxTicksLimit: 10 } // Keeps distance labels tidy along the x-axis
+                        },
+                        y: { 
+                            title: { display: true, text: 'Elevation (m)' }
+                        }
                     }
                 }
             });
         }
     </script>
+
+    
 </body>
 </html>
