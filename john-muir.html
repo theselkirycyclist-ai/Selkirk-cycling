@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dr John Muir Walk - Discover Selkirk</title>
 
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
@@ -51,8 +52,8 @@
         <h1 class="route-title">Dr John Muir Walk</h1>
 
         <div class="route-stats-bar">
-            <span>📏 Distance: 8 km</span>
-            <span>⛰️ Difficulty: Easy</span>
+            <span>📏 Distance: 8.2 km</span>
+            <span>⛰️ Elevation: 196 m climb</span>
             <span>⏱️ Est. Time: 2-2.5 hrs</span>
             <span>🥾 Surface: Paths & Hill Trails</span>
         </div>
@@ -78,92 +79,93 @@
         <p>&copy; 2026 Discover Selkirk. Happy Exploring!</p>
     </footer>
 
-    <!-- Libraries -->
+    <!-- Leaflet & Chart Libraries -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        const map = L.map('map').setView([55.548, -2.831], 12);
+        // Track Coordinates [Lat, Lng, Elevation (m)]
+        const trackData = [
+            [55.52724, -2.74995, 182], [55.52675, -2.75241, 185], [55.52662, -2.75485, 191],
+            [55.52603, -2.75714, 198], [55.52619, -2.75846, 203], [55.52534, -2.76100, 216],
+            [55.52694, -2.76272, 224], [55.52722, -2.76335, 228], [55.52714, -2.76446, 232],
+            [55.52977, -2.76837, 248], [55.53016, -2.76784, 251], [55.53237, -2.77164, 263],
+            [55.53445, -2.77436, 271], [55.53360, -2.77676, 275], [55.53309, -2.77893, 279],
+            [55.53378, -2.78078, 284], [55.53601, -2.78665, 298], [55.53627, -2.78705, 300],
+            [55.53605, -2.78904, 297], [55.53574, -2.79293, 290], [55.53456, -2.79357, 284],
+            [55.53248, -2.79983, 258], [55.53238, -2.80152, 250], [55.53329, -2.80199, 254],
+            [55.53502, -2.80230, 263], [55.53528, -2.80339, 268], [55.53628, -2.80522, 278],
+            [55.53828, -2.80709, 293], [55.53906, -2.80976, 289], [55.53980, -2.81554, 268],
+            [55.54028, -2.81858, 248], [55.54038, -2.81932, 242], [55.54051, -2.82143, 228],
+            [55.54078, -2.82322, 215], [55.54063, -2.82581, 198], [55.54097, -2.82695, 191],
+            [55.54140, -2.82919, 175], [55.54181, -2.82954, 172], [55.54263, -2.82815, 178],
+            [55.54396, -2.82685, 180], [55.54532, -2.82565, 176], [55.54609, -2.82458, 170],
+            [55.54704, -2.82710, 164], [55.54762, -2.82742, 161], [55.54824, -2.82818, 158],
+            [55.54852, -2.83128, 155], [55.54949, -2.83394, 149], [55.54984, -2.83757, 144],
+            [55.54942, -2.83796, 142]
+        ];
 
+        // 1. Initialize Map
+        const map = L.map('map');
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19, attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        // Load GPX File
-        new L.GPX('John-Muir-Walk.gpx', {
-            async: true,
-            polyline_options: { color: '#10b981', weight: 5, opacity: 0.85 }
-        }).on('loaded', function(e) {
-            const gpx = e.target;
-            map.fitBounds(gpx.getBounds());
+        // 2. Extract Lat/Lng for Polyline & compute cumulative distances
+        const latLngs = [];
+        const distances = [];
+        const elevations = [];
+        let totalDist = 0;
 
-            const distances = [];
-            const elevations = [];
-            let totalDist = 0;
+        for (let i = 0; i < trackData.length; i++) {
+            const pt = L.latLng(trackData[i][0], trackData[i][1]);
+            latLngs.push(pt);
 
-            gpx.get_layers().forEach(layer => {
-                if (layer instanceof L.Polyline) {
-                    const latlngs = layer.getLatLngs();
-                    for (let i = 0; i < latlngs.length; i++) {
-                        if (i > 0) {
-                            totalDist += latlngs[i].distanceTo(latlngs[i - 1]) / 1000;
-                        }
-                        
-                        // Extract elevation point safely
-                        let ele = latlngs[i].alt !== undefined ? Math.round(latlngs[i].alt) : null;
-                        
-                        // Add to array if valid number exists
-                        if (ele !== null && !isNaN(ele)) {
-                            distances.push(totalDist.toFixed(1));
-                            elevations.push(ele);
-                        }
-                    }
-                }
-            });
-
-            console.log("Extracted points count:", elevations.length);
-
-            if (elevations.length > 0) {
-                renderChart(distances, elevations);
-            } else {
-                console.warn("No elevation points detected inside the GPX track.");
+            if (i > 0) {
+                totalDist += latLngs[i - 1].distanceTo(pt) / 1000;
             }
-        }).addTo(map);
 
-        function renderChart(xData, yData) {
-            const ctx = document.getElementById('elevationChart').getContext('2d');
-            
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: xData,
-                    datasets: [{
-                        label: 'Elevation (m)',
-                        data: yData,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                        fill: true,
-                        tension: 0.2,
-                        pointRadius: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { 
-                            title: { display: true, text: 'Distance (km)' },
-                            ticks: { maxTicksLimit: 8 }
-                        },
-                        y: { 
-                            title: { display: true, text: 'Elevation (m)' }
-                        }
+            distances.push(totalDist.toFixed(1));
+            elevations.push(trackData[i][2]);
+        }
+
+        // Draw track on map and zoom fit
+        const polyline = L.polyline(latLngs, { color: '#10b981', weight: 5, opacity: 0.85 }).addTo(map);
+        map.fitBounds(polyline.getBounds());
+
+        // 3. Render Chart
+        const ctx = document.getElementById('elevationChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: distances,
+                datasets: [{
+                    label: 'Elevation (m)',
+                    data: elevations,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                    fill: true,
+                    tension: 0.25,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { 
+                        title: { display: true, text: 'Distance (km)' },
+                        ticks: { maxTicksLimit: 8 }
+                    },
+                    y: { 
+                        title: { display: true, text: 'Elevation (m)' },
+                        suggestedMin: 120,
+                        suggestedMax: 320
                     }
                 }
-            });
-        }
+            }
+        });
     </script>
 </body>
 </html>
