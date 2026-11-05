@@ -16,25 +16,26 @@
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-/* Navigation Bar Styling */
-nav {
-    background: #2c3e50;
-    padding: 15px 20px;
-    color: white;
-}
 
-nav a {
-    color: #10b981;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 0.95rem;
-    transition: color 0.2s ease;
-}
+        /* Navigation Bar Styling */
+        nav {
+            background: #2c3e50;
+            padding: 15px 20px;
+            color: white;
+        }
 
-nav a:hover {
-    color: #059669;
-    text-decoration: underline;
-}
+        nav a {
+            color: #10b981;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        nav a:hover {
+            color: #059669;
+            text-decoration: underline;
+        }
 
         body {
             background-color: #f4f7f6;
@@ -46,10 +47,10 @@ nav a:hover {
         .hero-header {
             background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url('walkingheader.jpg') center/cover no-repeat;
             color: white;
-            min-height: 520px; /* Provides vertical room for the house photo */
+            min-height: 520px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Pushes top-text up and bottom-text down */
+            justify-content: space-between;
             align-items: center;
             padding: 35px 20px 25px 20px;
             text-align: center;
@@ -63,11 +64,10 @@ nav a:hover {
         .top-text h1 {
             font-size: 3rem;
             font-weight: 700;
-            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.8); /* Ensures crisp contrast over upper sky */
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
             margin: 0;
         }
 
-        /* Invisible spacer that keeps the middle of the house image completely clear */
         .header-spacer {
             flex-grow: 1;
             min-height: 200px;
@@ -76,7 +76,7 @@ nav a:hover {
         .bottom-text p {
             font-size: 1.15rem;
             line-height: 1.5;
-            background: rgba(0, 0, 0, 0.5); /* Subtle dark pill background for easy reading */
+            background: rgba(0, 0, 0, 0.5);
             padding: 12px 22px;
             border-radius: 8px;
             backdrop-filter: blur(3px);
@@ -100,7 +100,7 @@ nav a:hover {
         /* 2-Column Stats Grid for Route Cards */
         .route-stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Creates 2 equal columns */
+            grid-template-columns: 1fr 1fr;
             gap: 8px;
             margin: 15px 0;
         }
@@ -127,7 +127,6 @@ nav a:hover {
             color: #2d3748;
         }
 
-        /* Makes the 5th item stretch across both columns at the bottom */
         .stat-full-width {
             grid-column: span 2;
         }
@@ -216,7 +215,6 @@ nav a:hover {
     </style>
 </head>
 <body>
-<body>
 
     <nav>
         <div style="max-width: 1100px; margin: 0 auto;">
@@ -225,15 +223,10 @@ nav a:hover {
     </nav>
 
     <header class="hero-header">
-        <!-- Your hero header content -->
-    </header>
-
-    <header class="hero-header">
         <div class="header-content top-text">
             <h1>Selkirk Walking Festival 2027</h1>
         </div>
 
-        <!-- Spacer pushes top and bottom text apart so the house in the header photo remains clear -->
         <div class="header-spacer"></div>
 
         <div class="header-content bottom-text">
@@ -366,7 +359,7 @@ nav a:hover {
                 </div>
             </div>
 
-            <!-- ROUTE 4 -->
+            <!-- Route 4 -->
             <div class="route-card">
                 <img src="peel.jpg" alt="Peel & Galashiels loop" class="route-img">
                 <div class="route-content">
@@ -405,51 +398,53 @@ nav a:hover {
                     <a href="peel-gala.html" class="btn">View Route Info & Interactive Map</a>
                 </div>
             </div>
-<!—walk 1 -->
-<div class="route-card">
-    <img src="walk1.jpg" alt="Dr John Muir walk" class="route-img">
-    <div class="route-content">
-        <h3>Dr John Muir Walk</h3>
-        
-                    <div class="route-stats-grid">
-    <div class="stat-item">
-        <span class="stat-label">Distance</span>
-        <span class="stat-value">📏 8 km</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-label">Elevation</span>
-        <span class="stat-value">⛰️ 196 m</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-label">Est. Time</span>
-        <span class="stat-value">⏱️ 2-2.5hrs</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-label">Surface</span>
-        <span class="stat-value">🥾Paths / Hill Trails</span>
-    </div>
-    <div class="stat-item stat-full-width">
-        <span class="stat-label">Difficulty</span>
-        <span class="stat-value">💪 Easy</span>
-    </div>
-</div>
 
+            <!-- Walk 1 -->
+            <div class="route-card">
+                <img src="walk1.jpg" alt="Dr John Muir walk" class="route-img">
+                <div class="route-content">
+                    <h3>Dr John Muir Walk</h3>
+                    
+                    <div class="route-stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Distance</span>
+                            <span class="stat-value">📏 8 km</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Elevation</span>
+                            <span class="stat-value">⛰️ 196 m</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Est. Time</span>
+                            <span class="stat-value">⏱️ 2-2.5hrs</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Surface</span>
+                            <span class="stat-value">🥾 Paths / Hill Trails</span>
+                        </div>
+                        <div class="stat-item stat-full-width">
+                            <span class="stat-label">Difficulty</span>
+                            <span class="stat-value">💪 Easy</span>
+                        </div>
+                    </div>
 
                     <div class="features-list">
                         <h4>Interesting Features Along the Way:</h4>
                         <span class="tag">Views from Selkirk Hill</span>
-                        <span class="tag">Scotland’s oldest racecourse </span>
-                        <span class="tag">Walking in the steps of Dr John Muir </span>
+                        <span class="tag">Scotland’s oldest racecourse</span>
+                        <span class="tag">Walking in the steps of Dr John Muir</span>
                     </div>
 
                     <a href="john-muir.html" class="btn">View Route Info & Interactive Map</a>
+                </div>
+            </div>
 
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 Discover Selkirk by Bike. Happy Riding!<br>
-        The Scottish Borders roads are wonderful to ride, but conditions change. These GPX files and route summaries are personal recommendations provided for guidance only—you are responsible for your own safety and navigation on the road.</p>
+        <p>&copy; 2026 Discover Selkirk Outdoors. Happy Exploring!<br>
+        The Scottish Borders roads and trails are wonderful to explore, but conditions change. These route summaries are provided for guidance only—you are responsible for your own safety and navigation.</p>
     </footer>
 
 </body>
