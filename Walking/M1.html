@@ -56,17 +56,16 @@
     <div class="container">
         <img src="Photos/H1.jpg" alt="Ettrick Valley" class="route-header-img">
 
-        <h1 class="route-title">Ettrick & Yarrow Valley Circular (short)</h1>
+        <h1 class="route-title">Selkirk North Marches Circular</h1>
 
         <div class="route-stats-bar">
-            <span>📏 Distance: 32 km</span>
+            <span>📏 Distance: 313km</span>
             <span>⛰️ Difficulty: Moderate</span>
-            <span>⏱️ Est. Time: 1 - 2 hrs</span>
+            <span>⏱️ Est. Time: 4.5hrs</span>
         </div>
 
         <p style="font-size: 1.1rem; margin-bottom: 20px;">
-            A scenic ride up Ettrick Valley with a significant climb over Witchie Knowe down into the Yarrow valley for the return to Selkirk. Features low traffic roads and stunning views across the Scottish Borders.
-        </p>
+            This walk follows the route of the annual Common Riding, a tradition dating to 13th century. Crossing the Ettrick Water, it goes up the Linglie glen to the Three Brethern cairns (463m) via Tibbie Tamson's grave, returning over Peat Law and Linglie Hill.  </p>
 
         <!-- Map & Elevation Section -->
         <div class="map-container">
@@ -103,7 +102,7 @@
         const elevations = [];
 
         // Load specific GPX file for this page
-        new L.GPX('H1.gpx', {
+        new L.GPX('M1.gpx', {
             async: true,
             polyline_options: { color: '#10b981', weight: 5, opacity: 0.85 }
         }).on('loaded', function(e) {
